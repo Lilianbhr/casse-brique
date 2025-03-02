@@ -11,11 +11,13 @@ pygame.display.set_caption("Casse Brique")
 bg = pygame.Color(20, 20, 20)
 
 paddle = Paddle()
+ball = Ball()
 
 clock = pygame.time.Clock()
 running = True
 while running :
     screen.fill(bg)
+    ball.update(paddle.direction)
     paddle.update()
     total.draw(screen)
     for event in pygame.event.get():
