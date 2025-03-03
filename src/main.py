@@ -13,6 +13,28 @@ bg = pygame.Color(20, 20, 20)
 paddle = Paddle()
 ball = Ball()
 
+choix_image = {
+    "R": pygame.image.load("../assets/images/Brick-Red.png").convert_alpha(),
+    "O": pygame.image.load("../assets/images/Brick-Orange.png").convert_alpha(),
+    "J": pygame.image.load("../assets/images/Brick-Yellow.png").convert_alpha(),
+    "V": pygame.image.load("../assets/images/Brick-Green.png").convert_alpha(),
+    "B": pygame.image.load("../assets/images/Brick-Blue.png").convert_alpha()
+}
+
+def dessiner_niveau():
+    fichier = open("../levels/level_1.txt")
+    lignes = fichier.readlines()
+    y = 0
+    for ligne in lignes :
+        x = 0
+        for elt in ligne :
+            if elt in choix_image :
+                brique = Brick(choix_image[elt], x + gap, y + gap)
+            x += 80
+        y += 20
+
+dessiner_niveau()
+
 clock = pygame.time.Clock()
 running = True
 while running :
@@ -32,7 +54,10 @@ while running :
                 break
         elif event.type == pygame.KEYUP :
             paddle.direction = 0
+    if ball.rect.y > hauteur - 43 :
+        running = False
     pygame.display.flip()
     clock.tick(60)
+pygame.time.wait(1500)
 
 pygame.quit()

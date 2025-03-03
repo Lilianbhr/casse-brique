@@ -43,10 +43,7 @@ class Ball(pygame.sprite.Sprite):
         current_x = self.rect.x
         current_y = self.rect.y
 
-        self.rect.x += self.speed[0]
-        self.rect.y += self.speed[1]
-
-        if self.rect.right <= 0 or self.rect.left >= 900:
+        if self.rect.left <= 0 or self.rect.right >= 900:
             self.rect.x = current_x
             self.speed[0] *= -1
         if self.rect.top <= 0 :
@@ -73,3 +70,25 @@ class Ball(pygame.sprite.Sprite):
                             self.speed[0] += 1
                             self.speed[1] -= 1
                 self.speed[1] *= -1
+            elif type(elt) == Brick :
+                if (self.rect.top <= elt.rect.bottom and self.rect.bottom > elt.rect.bottom) or (self.rect.bottom >= elt.rect.top and self.rect.top < elt.rect.top):
+                    self.speed[1] *= -1
+                if (self.rect.right <= elt.rect.left and self.rect.left > elt.rect.left) or (self.rect.left >= elt.rect.right and self.rect.right < elt.rect.right):
+                    self.speed[0] *= -1
+                elt.kill()
+
+
+        self.rect.x += self.speed[0]
+        self.rect.y += self.speed[1]
+
+class Brick(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        super().__init__()
+        self.image = image
+        self.image = pygame.transform.scale(self.image, (80, 20))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+        briques.add(self)
+        total.add(self)
