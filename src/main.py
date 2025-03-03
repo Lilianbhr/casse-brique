@@ -1,6 +1,7 @@
 import pygame
 from classes import *
 pygame.init()
+pygame.mixer.init()
 
 # Fenêtre
 gap = 50
@@ -22,7 +23,7 @@ choix_image = {
 }
 
 def dessiner_niveau():
-    fichier = open("../levels/level_1.txt")
+    fichier = open("../levels/level_2.txt", "r")
     lignes = fichier.readlines()
     y = 0
     for ligne in lignes :
@@ -35,6 +36,15 @@ def dessiner_niveau():
 
 dessiner_niveau()
 
+# Musique
+musique = pygame.mixer.music.load("../assets/musique/main-theme.mp3")
+pygame.mixer.music.set_volume(0.2)
+perdu = pygame.mixer.Sound("../assets/musique/lose.mp3")
+perdu.set_volume(1)
+gagne = pygame.mixer.Sound("../assets/musique/win.mp3")
+perdu.set_volume(1)
+
+pygame.mixer.music.play(3)
 clock = pygame.time.Clock()
 running = True
 while running :
@@ -54,10 +64,17 @@ while running :
                 break
         elif event.type == pygame.KEYUP :
             paddle.direction = 0
-    if ball.rect.y > hauteur - 43 :
+    if ball.rect.y > hauteur - 35 :
         running = False
+        pygame.mixer.music.stop()
+        perdu.play()
+        pygame.time.wait(500)
+    if len(briques) == 0 :
+        running = False
+        pygame.mixer.music.stop()
+        gagne.play()
+        pygame.time.wait(5000)
     pygame.display.flip()
     clock.tick(60)
-pygame.time.wait(1500)
-
+pygame.time.wait(500)
 pygame.quit()
