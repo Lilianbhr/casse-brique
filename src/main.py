@@ -23,7 +23,7 @@ choix_image = {
 }
 
 def dessiner_niveau():
-    fichier = open("../levels/level_2.txt", "r")
+    fichier = open("../levels/level_1.txt", "r")
     lignes = fichier.readlines()
     y = 0
     for ligne in lignes :
@@ -46,6 +46,7 @@ perdu.set_volume(1)
 
 pygame.mixer.music.play(3)
 clock = pygame.time.Clock()
+fin = "-"
 running = True
 while running :
     screen.fill(bg)
@@ -68,13 +69,16 @@ while running :
         running = False
         pygame.mixer.music.stop()
         perdu.play()
-        pygame.time.wait(500)
+        fin = "perdu"
     if len(briques) == 0 :
         running = False
         pygame.mixer.music.stop()
         gagne.play()
-        pygame.time.wait(5000)
+        fin = "gagne"
     pygame.display.flip()
     clock.tick(60)
-pygame.time.wait(500)
+if fin == "perdu" :
+    pygame.time.wait(1500)
+elif fin == "gagne" :
+    pygame.time.wait(5500)
 pygame.quit()

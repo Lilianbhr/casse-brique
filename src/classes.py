@@ -1,4 +1,5 @@
 import pygame
+from random import *
 
 total = pygame.sprite.Group()
 briques = pygame.sprite.Group()
@@ -35,7 +36,9 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = 450
         self.rect.centery = 425
-        self.speed = [1, 9]
+        self.speed = [0, 0]
+        self.speed[0] = randint(1, 3)
+        self.speed[1] = 10 - self.speed[0]
         self.bounce = pygame.mixer.Sound("../assets/musique/bounce.mp3")
         self.bounce.set_volume(1)
         self.bick_break = pygame.mixer.Sound("../assets/musique/break.mp3")
@@ -62,6 +65,8 @@ class Ball(pygame.sprite.Sprite):
             if type(elt) == Paddle :
                 self.bounce.play()
                 self.speed[0] += paddle_direction
+                if abs(self.speed[0]) > 9 :
+                    self.speed[0] -= paddle_direction
                 self.speed[1] = 10 - abs(self.speed[0])
                 self.rect.bottom = elt.rect.top + 3
                 self.speed[1] *= -1
@@ -72,6 +77,7 @@ class Ball(pygame.sprite.Sprite):
                 if (self.rect.right >= elt.rect.left and self.rect.left < elt.rect.left) or (self.rect.left <= elt.rect.right and self.rect.right > elt.rect.right):
                     self.speed[0] *= -1
                 elt.kill()
+                break
 
         if abs(self.speed[0]) + abs(self.speed[1]) != 10 :
             self.speed = current_speed
